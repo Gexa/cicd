@@ -30,6 +30,7 @@ jobs:
   test:
     name: Run ESLint and Tests
     runs-on: ubuntu-latest
+    needs: install
     strategy:
       matrix:
         node-version: [20.x]
@@ -52,7 +53,7 @@ jobs:
   build:
     name: Build project
     runs-on: ubuntu-latest
-    needs: check
+    needs: [install, test]
     strategy:
       matrix:
         node-version: [20.x]
