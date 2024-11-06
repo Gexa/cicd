@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  check:
+  test:
     name: Run ESLint
     runs-on: ubuntu-latest
     - uses: actions/checkout@v4
