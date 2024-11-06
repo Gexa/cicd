@@ -6,11 +6,11 @@ on:
     branches: ["main"]
 
 jobs:
-
-  test:
+  check:
     name: Run ESLint
     runs-on: ubuntu-latest
-    - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -18,7 +18,7 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run lint
-      
+
   build:
     name: Build project
     runs-on: ubuntu-latest
