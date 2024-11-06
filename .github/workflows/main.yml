@@ -6,13 +6,17 @@ on:
     branches: ["main"]
 
 jobs:
+  install:
+    name: Install
+    - uses: actions/checkout@v4
+    - uses: ./.github/actions/setup-and-cache
+      
   test:
     name: Run ESLint and Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install packages
-        id: install
         uses: ./.github/actions/setup-and-cache
       - name: Run ESLint
         run: npm run lint
@@ -26,7 +30,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install packages
-        id: install
         uses: ./.github/actions/setup-and-cache
       - name: Build project
         id: build-project
