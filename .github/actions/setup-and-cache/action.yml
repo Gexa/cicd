@@ -3,14 +3,11 @@ description: Install node packages and cache them
 
 runs:
   using: "composite"
-  strategy:
-    matrix:
-      node-version: [20.x]
   steps:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 20
         cache: "npm"
     - name: Load cached modules
       id: cache-node-modules
