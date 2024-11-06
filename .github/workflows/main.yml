@@ -45,7 +45,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node_modules
-      - run: npm run lint
+      - name: Run ESLint
+        if: steps.download.outcome == 'success'
+        run: npm run lint
       - name: Test
         if: steps.download.outcome == 'success'
         run: npm test
