@@ -1,0 +1,19 @@
+{
+  "baseUrl": "./src",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "es2017",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@app/*": ["./*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "**/node_modules/*",
+    "**/*.test.*",
+    "**/__test__/*",
+    "coverage/**"
+  ]
+}
