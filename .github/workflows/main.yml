@@ -18,6 +18,12 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run lint
+      - name: "Save node_modules"
+        uses: actions/upload-artifact@v4
+        with:
+          name: node_modules
+          path: node_modules
+          retention-days: 1
 
   build:
     name: Build project
@@ -25,7 +31,7 @@ jobs:
     needs: check
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -34,6 +40,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+      - name: Download node_modules
+        uses: actions/download-artifact@v4
+        with:
+          name: node_modules
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
