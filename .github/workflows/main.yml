@@ -15,10 +15,8 @@ jobs:
         id: install
         uses: ./.github/actions/setup-and-cache
       - name: Run ESLint
-        if: steps.install.outputs.exit_code == '0'
         run: npm run lint
       - name: Test
-        if: steps.install.outputs.exit_code == '0'
         run: npm test
 
   build:
@@ -32,5 +30,12 @@ jobs:
         uses: ./.github/actions/setup-and-cache
       - name: Build project
         id: build-project
-        if: steps.install.outputs.exit_code == '0'
         run: npm run build --if-present
+      - name: Create artifact for build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist
+            !dist/**/*.md
+            !dist/**/*.spec.*
