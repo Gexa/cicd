@@ -6,8 +6,28 @@ on:
     branches: ["main"]
 
 jobs:
-  check:
-    name: Run ESLint
+  install:
+    name: Install packages
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm i
+      - name: "Save node_modules"
+        uses: actions/upload-artifact@v4
+        with:
+          name: node_modules
+          path: node_modules
+          retention-days: 1
+
+  test:
+    name: Run ESLint and Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,14 +39,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: npm ci
-      - run: npm run lint
-      - name: "Save node_modules"
-        uses: actions/upload-artifact@v4
+      - name: Download node_modules
+        uses: actions/download-artifact@v4
         with:
           name: node_modules
-          path: node_modules
-          retention-days: 1
+      - run: npm run lint
+      - name: Test
+        if: steps.download.outcome == 'success'
+        run: npm test
 
   build:
     name: Build project
@@ -44,9 +64,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Download node_modules
+        id: download
         uses: actions/download-artifact@v4
         with:
           name: node_modules
-      #- run: npm ci // we don't need it anymore, because we have an artifact
       - run: npm run build --if-present
-      - run: npm test
